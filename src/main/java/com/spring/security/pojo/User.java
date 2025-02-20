@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -22,13 +24,10 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
-    @NotNull(message = "User Name can't be null")
     private String userName;
-    @NotNull(message = "User Email can't be null")
     @Column(unique = true)
     @Email
     private String userEmail;
-    @NotNull(message = "User Password can't be null")
     private String Password;
     @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     //FetchType.EAGER whenever we load User entity roles associated with it will also be loaded.
@@ -40,6 +39,8 @@ public class User {
             joinColumns = { @JoinColumn(name = "user_id", referencedColumnName="userId")},
             inverseJoinColumns = {@JoinColumn (name = "role_id",referencedColumnName = "roleId")}
     )
+    @CreationTimestamp
     private LocalDateTime createdOn;
+    @UpdateTimestamp
     private LocalDateTime updateOn;
 }
