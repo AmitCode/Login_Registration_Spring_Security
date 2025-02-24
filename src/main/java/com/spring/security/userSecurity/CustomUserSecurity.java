@@ -11,19 +11,17 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import java.util.stream.Collectors;
 
+import static com.spring.security.config.SpringSecurity.passwordEncoder;
+
+@Service
 public class CustomUserSecurity implements UserDetailsService {
 
     @Autowired
-    UserDetailsService  userDetailsService;
     private UserRepository repository;
-
-    @Bean
-    public static PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
-    }
 
     public CustomUserSecurity(UserRepository repository) {
         this.repository = repository;
@@ -40,11 +38,5 @@ public class CustomUserSecurity implements UserDetailsService {
             throw  new UsernameNotFoundException("Invalid email or password");
         }
 
-    }
-
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder managerBuilder) throws Exception{
-        managerBuilder.userDetailsService(userDetailsService)
-                .passwordEncoder(passwordEncoder());
     }
 }
